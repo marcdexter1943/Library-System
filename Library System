@@ -1,0 +1,174 @@
+package examples;
+
+import java.time.LocalDateTime;
+
+
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Scanner;
+class library{
+    ArrayList<String> availableBooks= new ArrayList<>();
+    ArrayList<String> borrowedBooks= new ArrayList<>();
+    ArrayList<String> borrowedTo= new ArrayList<>();
+    ArrayList<String> bookLog= new ArrayList<>();
+
+    library(){
+        availableBooks.add("DYNAMICS OF RODS");
+        availableBooks.add("HANDBOOK OF PARVOVIRUSES");
+        availableBooks.add("STRUCTURAL ANYLYSIS");
+        availableBooks.add("COST ACCOUNTING");
+        availableBooks.add("HANDBOOK OF CLASSICAL CONDITIONING");
+        availableBooks.add("HERPETOLOGY");
+        availableBooks.add("CONTEMPORARY FINANCIAL MANAGEMENT");
+        availableBooks.add("LITERATURE");
+        availableBooks.add("MEDICAL ASSISTING");
+        availableBooks.add("CHILDRENS DICTIONARY");
+        
+
+        }
+    
+    private String atDateTime(){
+        LocalDateTime DateTime= LocalDateTime.now();
+        System.out.println(DateTime);
+        return DateTime.format(DateTimeFormatter.ofPattern("MMM dd, YYYY")); 
+    }
+    public void borrowBook(String borrowedBook,String name){
+        int ind= availableBooks.indexOf(borrowedBook);
+        if(ind!= -1) {
+            System.out.println("Enter the name of the borrower : ");
+            System.out.println("");
+            name = new Scanner(System.in).nextLine();
+            borrowedBooks.add(borrowedBook);
+            bookLog.add("* Book Borrowed ***\nBorrowed Book: "+ borrowedBook+ "\n"+ "Borrowed by : "+name + "\n"+ "Borrowed At: "+atDateTime()+"\n");
+            System.out.println("");
+            borrowedTo.add(name);
+            System.out.println("*** " + borrowedBook + " Successfuly Borrowed to " + name + " ***");
+            
+        }
+        else {
+            System.out.println("Book is not Available  : ");
+            System.exit(1);
+        }
+
+    }
+        
+        
+    
+    public void returnBook(String returnBook, String name){
+        int ind= borrowedBooks.indexOf(returnBook);
+        if(ind!= -1) {
+            System.out.println("Enter the name of the person who is Returning the Book : ");
+            name = new Scanner(System.in).nextLine();
+            boolean confirm= name.equalsIgnoreCase(borrowedTo.get(ind));
+            if(!confirm){
+                System.out.println("Are you returning the book taken by "+borrowedTo.get(ind));
+                System.out.println("Press y for yes or any other key for no");
+                char cn= new Scanner(System.in).next().charAt(0);
+                if(cn=='y') {
+                    confirm = true;
+                }
+            }
+            if(confirm) {
+                availableBooks.add(returnBook);
+                bookLog.add("*** Book Returned ***\nReturn Book : " + returnBook + "\nReturned by: " + name + "\nReturned at: "+atDateTime()+ "\n");
+                System.out.println("*** " + returnBook + " Returned by : " +name+" ***");
+            }
+            else{
+                System.out.println("Sorry then you can't return it");
+            }
+        }
+        else {
+        	System.out.println("Book was not Borrowed");
+        	System.exit(1);
+        }
+
+        
+  
+    }
+    
+    public void showAvailableBooks(){
+        System.out.println("----------Available Books----------");
+        int i=0;
+        while(i<availableBooks.size()){
+            System.out.println(availableBooks.get(i));
+            i++;
+        }
+        System.out.println("-----------------------------------------------");
+        
+        
+        
+        
+    }
+    public void showBookLog(){
+        System.out.println("----------Book Logs----------");
+        int i=0;
+        while(i<bookLog.size()){
+            System.out.println(bookLog.get(i));
+            i++;
+        }
+        System.out.println("---------------------------------");
+    }
+    
+    
+    
+    }
+
+
+
+
+
+public class eLibrary {
+    static library myBooks = new library();
+    static String book, name;
+    public static void choose(){
+        while(true){
+        	System.out.println("***********WELCOME TO PROVINCIAL LIBRARY************** ");
+            System.out.println("");
+            System.out.println("Enter [1] |To see Available Books| [2] |To Borrow a Book| [3] |To Return a Book| [4] |To see Book Logs| [0] |To exit| : ");
+            System.out.println("");
+            Scanner sc = new Scanner(System.in);
+            int enter = Integer.parseInt(sc.nextLine());
+            if (enter == 1) {
+                myBooks.showAvailableBooks();
+            }else if (enter == 2) {
+                System.out.println("Enter the Title of the book you want to Borrow : ");
+                book = sc.nextLine();
+                myBooks.borrowBook(book, name);
+            } else if (enter == 3) {
+                System.out.println("Enter the Title of the book you want to Return : ");
+                book = sc.nextLine();
+                myBooks.returnBook(book,name);
+            } else if (enter == 4) {
+                myBooks.showBookLog();
+            }else if(enter == 0) {
+            	break;
+            }
+            else{
+                System.out.println("Invalid Input!");
+            }
+            
+            
+            System.out.println("");
+            System.out.println("Enter any number or letter to continue, or Enter [0] to exit : ");
+            char exit= sc.next().charAt(0);
+            if(exit=='0'){
+                break;
+            }
+            
+        }
+    }
+    
+    
+    public static void main(String[] args){
+        try{
+            choose();
+        }
+        catch (Exception e){
+            System.out.println(e);
+        }
+        
+    }
+    
+          
+         
+ }
